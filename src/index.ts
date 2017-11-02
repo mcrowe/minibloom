@@ -5,6 +5,8 @@ import { getOptimalParams } from './params'
 export { load, save } from './saver'
 
 
+export type IFilter = Filter
+
 
 export function optimalFilter(numItems: number, errorRate: number): Filter {
   const params = getOptimalParams(numItems, errorRate)
