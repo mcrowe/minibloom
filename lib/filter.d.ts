@@ -1,12 +1,11 @@
-/// <reference types="node" />
 export default class Filter {
-    private numHashes;
-    private numBits;
-    private buckets;
+    readonly buckets: Int32Array;
+    readonly numBits: number;
+    readonly numHashes: number;
     private locations;
-    constructor(numBits: number, numHashes: number);
+    constructor(buckets: Int32Array, numHashes: number);
     add(v: string): void;
     test(v: string): boolean;
-    toBuffer(): Buffer;
     private getLocations(v);
+    private makeLocationsArray();
 }

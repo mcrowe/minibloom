@@ -6,29 +6,16 @@ type ITypedArray = Uint8Array | Uint16Array | Uint32Array
 
 export default class Filter {
 
-  private numBits: number
-  private buckets: Int32Array
+  public readonly buckets: Int32Array
+  public readonly numBits: number
+  public readonly numHashes: number
   private locations: ITypedArray
 
-  // Note that *m* is rounded up to the nearest multiple of
-  // 32.  *k* specifies the number of hashing functions.
-  constructor(numBits: number, private numHashes: number) {
-    // Number of 32-bit words needed to store all the bits
-    const nWords = Math.ceil(numBits / 32)
-
-    // Number of bits rounded up to multiple of 32
-    this.numBits = nWords * 32
-
-    // Create a buffer for the data
-    this.buckets = new Int32Array(nWords)
-
-    // Create a buffer for the hash functions
-    const kbytes = 1 << Math.ceil(Math.log(Math.ceil(Math.log(this.numBits) / Math.LN2 / 8)) / Math.LN2)
-
-    const kbuffer = new ArrayBuffer(kbytes * numHashes)
-
-    const arrayType = kbytes === 1 ? Uint8Array : kbytes === 2 ? Uint16Array : Uint32Array
-    this.locations = new arrayType(kbuffer)
+  constructor(buckets: Int32Array, numHashes: number) {
+    this.buckets = buckets
+    this.numBits = buckets.byteLength * 8
+    this.numHashes = numHashes
+    this.locations = this.makeLocationsArray()
   }
 
   add(v: string) {
@@ -55,14 +42,6 @@ export default class Filter {
     return true
   }
 
-  toBuffer(): Buffer {
-    if (typeof Buffer == 'undefined') {
-      throw new Error("Can only export a filter to a buffer in the node.js environment")
-    }
-
-    return new Buffer(this.buckets.buffer)
-  }
-
   private getLocations(v: string) {
     const m = this.numBits
     const a = Fnv.hash(v)
@@ -75,6 +54,13 @@ export default class Filter {
     }
 
     return this.locations
+  }
+
+  private makeLocationsArray(): ITypedArray {
+    const kbytes = 1 << Math.ceil(Math.log(Math.ceil(Math.log(this.numBits) / Math.LN2 / 8)) / Math.LN2)
+    const kbuffer = new ArrayBuffer(kbytes * this.numHashes)
+    const arrayType = kbytes === 1 ? Uint8Array : kbytes === 2 ? Uint16Array : Uint32Array
+    return new arrayType(kbuffer)
   }
 
 }
