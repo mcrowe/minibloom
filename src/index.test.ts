@@ -23,13 +23,16 @@ test('fromOptimal', t => {
 
 
 test('save/load', t => {
-  const filter = Bloom.filter(25, 7)
+  const filter = Bloom.filter(32, 7)
 
   filter.add('abc')
 
   const buffer = Bloom.save(filter)
 
-  const loadedFilter = Bloom.load(buffer, 7)
+  const loadedFilter = Bloom.load(buffer)
+
+  t.is( loadedFilter.numHashes, 7 )
+  t.is( loadedFilter.numBits, 32 )
 
   t.is( loadedFilter.test('abc'), true )
   t.is( loadedFilter.test('def'), false )

@@ -35,11 +35,9 @@ filter.add('abc')
  */
 filter.test('abc')
 
-// [node only] Get a compact binary representation of the filter for persisting on disk.
-filter.toBuffer()
-
-// [node only] Load a persisted representation
-const filter = Bloom.fromBuffer(buffer)
+// Saving and loading from/to buffers (node.js only).
+const buffer = Bloom.save(filter)
+const loadedBuffer = Bloom.load(buffer)
 
 ```
 
