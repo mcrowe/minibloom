@@ -28,5 +28,5 @@
     "watch": "tsc -w"
   },
   "typings": "lib/index",
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
