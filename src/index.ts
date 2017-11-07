@@ -2,7 +2,12 @@ import Filter from './filter'
 import { getOptimalParams } from './params'
 
 
-export { load, save } from './saver'
+export {
+  toBuffer,
+  fromBuffer,
+  toBase64,
+  fromBase64
+} from './serializer'
 
 
 export type IFilter = Filter

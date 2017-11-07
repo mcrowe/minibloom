@@ -7,3 +7,5 @@
 import Filter from './filter';
 export declare function save(filter: Filter): Buffer;
 export declare function load(buffer: Buffer): Filter;
+export declare function toBase64(filter: Filter): string;
+export declare function fromBase64(base64: string): Filter;
