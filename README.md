@@ -35,9 +35,13 @@ filter.add('abc')
  */
 filter.test('abc')
 
+// Saving and loading from/to base64 strings.
+const string = Bloom.toBase64(filter)
+const loadedBuffer = Bloom.fromBase64(string)
+
 // Saving and loading from/to buffers (node.js only).
-const buffer = Bloom.save(filter)
-const loadedBuffer = Bloom.load(buffer)
+const buffer = Bloom.toBuffer(filter)
+const loadedBuffer = Bloom.fromBuffer(buffer)
 
 ```
 
